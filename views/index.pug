@@ -1,0 +1,148 @@
+html
+  head
+    title BoxBackup
+    link(rel='stylesheet', href='/styles/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/styles/css/styles.css')
+  body
+    .container.mt-3
+      .row.my-4
+        .col-auto 
+          h2 Box Backup GUI
+      .row.mb-3
+        .col-6
+          .card
+            .card-header Статистика
+            .card-body
+              .row 
+                .col-auto.flex-d.flex-grow-1 Все пространство
+                .col-auto
+                  .row 
+                    .col-auto
+                      span= storageConfig.hardLimit[0]
+                    .col-auto
+                      span= storageConfig.hardLimit[1]
+              .row
+                .col-auto.flex-d.flex-grow-1 Занятое пространство
+                .col-auto
+                  .row 
+                    .col-auto
+                      span= storageConfig.used[0]
+                    .col-auto
+                      span= storageConfig.used[1]
+              .row
+                .col-auto.flex-d.flex-grow-1 Текущие версии
+                .col-auto
+                  .row 
+                    .col-auto
+                      span= storageConfig.currentFiles[0]
+                    .col-auto
+                      span= storageConfig.currentFiles[1]
+              .row
+                .col-auto.flex-d.flex-grow-1 Прошлые версии
+                .col-auto
+                  .row 
+                    .col-auto
+                      span= storageConfig.oldFiles[0]
+                    .col-auto
+                      span= storageConfig.oldFiles[1]
+              .row
+                .col-auto.flex-d.flex-grow-1 Удаленные файлы
+                .col-auto
+                  .row 
+                    .col-auto
+                      span= storageConfig.deletedFiles[0]
+                    .col-auto
+                      span= storageConfig.deletedFiles[1]
+
+
+        .col-6 
+          .card
+            .card-header Конфигурация сервера
+            .card-body
+              .row 
+                .col-auto.flex-d.flex-grow-1 Имя хоста
+                .col-auto
+                  span= clientConfig.storageHostName
+              .row 
+                .col-auto.flex-d.flex-grow-1 Интервал резервного копирования
+                .col-auto
+                  span= clientConfig.updateStoreInterval
+              .row 
+                .col-auto.flex-d.flex-grow-1 Минимальный возраст файла
+                .col-auto
+                  span= clientConfig.minimumFileAge
+      .row
+        .col-6 
+          .row.mb-3
+            .col-12
+              .card
+                .card-header Список файлов
+                .card-body
+                  .list-group
+                  each f in files 
+
+                    li.list-group-item.d-flex.justify-content-between.align-items-center
+                      if !backupedFilesMap[f.title] 
+                        span.text-danger= f.title
+                      else if backupedFilesMap[f.title].modifiedAt.ts !== filesMap[f.title].modifiedAt.ts
+                        span= f.title
+                        div
+                          span.badge.badge-danger.badge-pill M
+                          form.d-inline.ml-3(action="/restore/file/" + f.title, method="post")
+                            button.btn.btn-primary.btn-sm(type="submit") 
+                              i.fas.fa-rotate-left
+                      else
+                        span= f.title
+                        div
+                          form.d-inline.ml-3(action="/restore/file/" + f.title, method="post")
+                            button.btn.btn-primary.btn-sm(type="submit") 
+                              i.fas.fa-rotate-left
+
+          .row 
+            .col-auto
+              form(action="/restore/full", method="post")
+                button.btn.btn-primary(type="submit") Восстановить директорию
+
+        .col-6 
+          .row.mb-3
+            .col-12
+              .card
+                .card-header Backup Runner 
+                .card-body 
+                  .row 
+                    .col-auto.flex-d.flex-grow-1 Время следующего копирования
+                    .col-auto
+                      span= nextBackupTime
+                  .row.text-muted
+                    .col-auto.flex-d.flex-grow-1 Риск
+                    .col-auto
+                      span= risk
+          .row 
+            .col-auto 
+              form(action="/runner/sync", method="post")
+                button.btn.btn-primary(type="submit") Копировать сейчас
+
+
+      .row.mb-3
+        .col-6
+          .card
+            .card-header Восстановленные файлы
+            .card-body
+              .list-group
+              each f in restoredFiles 
+
+                li.list-group-item.d-flex.justify-content-between.align-items-center
+                  span= f
+        .col-6
+          .card
+            .card-header Восстановленные образы
+            .card-body
+              .list-group
+              each f in restoredFulls
+
+                li.list-group-item.d-flex.justify-content-between.align-items-center
+                  span= f
+
+
+
+

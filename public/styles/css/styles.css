@@ -1,0 +1,10 @@
+
+@import "/styles/fontawesome/fontawesome.min.css";
+@import "/styles/fontawesome/brands.min.css";
+@import "/styles/fontawesome/solid.min.css";
+@import "/styles/fontawesome/regular.min.css";
+
+.btn-img {
+    width: 50px;
+}
+
