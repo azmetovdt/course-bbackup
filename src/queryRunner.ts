@@ -48,7 +48,7 @@ export class ClientConfig {
 
 export class QueryRunner {
     public static executeRawQuery(command: string): Observable<string> {
-        return from(exec(`bbackupquery "${command}" "exit"`))
+        return from(exec(`bbackupquery '${command}' "exit"`))
             .pipe(
                 map((o: any) => o.stdout.trim())
             )
@@ -136,7 +136,7 @@ export class QueryRunner {
     }
 
     public static restoreFile(filename: string): Observable<string> {
-        return this.executeRawQuery(`get home-ohstapit-Documents-backupped-/${filename} restored/files/${filename}@${new Date().toISOString()}`)
+        return this.executeRawQuery(`get "home-ohstapit-Documents-backupped-/${filename}" "restored/files/${filename}@${new Date().toISOString()}"`)
     }
 
     public static runSync(): Observable<string> {
