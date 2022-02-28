@@ -1,4 +1,4 @@
 #!/bin/bash
-for f in $(find /home/ohstapit/Documents/backupped -name '*'); do 
-    echo $f $(date -r $f "+%Y-%m-%dT%H:%M:%S"); 
+for f in /home/ohstapit/Documents/backupped/*; do 
+    echo $f\\0$(date -r "$f" "+%Y-%m-%dT%H:%M:%S"); 
     done
