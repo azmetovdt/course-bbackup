@@ -82,21 +82,24 @@ html
                   each f in files 
 
                     li.list-group-item.d-flex.justify-content-between.align-items-center
-                      if !backupedFilesMap[f.title] 
-                        span.text-danger= f.title
-                      else if backupedFilesMap[f.title].modifiedAt.ts !== filesMap[f.title].modifiedAt.ts
-                        span= f.title
-                        div
-                          span.badge.badge-danger.badge-pill M
-                          form.d-inline.ml-3(action="/restore/file/" + f.title, method="post")
-                            button.btn.btn-primary.btn-sm(type="submit") 
-                              i.fas.fa-rotate-left
-                      else
-                        span= f.title
-                        div
-                          form.d-inline.ml-3(action="/restore/file/" + f.title, method="post")
-                            button.btn.btn-primary.btn-sm(type="submit") 
-                              i.fas.fa-rotate-left
+                      if f.title.trim().length === 0
+                          i Пробельное название
+                      else 
+                        if !backupedFilesMap[f.title] 
+                          span.text-danger= f.title
+                        else if backupedFilesMap[f.title].modifiedAt.ts !== filesMap[f.title].modifiedAt.ts
+                          span= f.title
+                          div
+                            span.badge.badge-danger.badge-pill M
+                            form.d-inline.ml-3(action="/restore/file/" + f.title, method="post")
+                              button.btn.btn-primary.btn-sm(type="submit") 
+                                i.fas.fa-rotate-left
+                        else
+                          span= f.title
+                          div
+                            form.d-inline.ml-3(action="/restore/file/" + f.title, method="post")
+                              button.btn.btn-primary.btn-sm(type="submit") 
+                                i.fas.fa-rotate-left
 
           .row 
             .col-auto
