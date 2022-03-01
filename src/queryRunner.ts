@@ -139,10 +139,11 @@ export class QueryRunner {
         return this.executeRawQuery(`get "home-ohstapit-Documents-backupped-/${filename}" "restored/files/${filename}@${new Date().toISOString()}"`)
     }
 
-    public static runSync(): Observable<string> {
+    public static runSync(backupRunner: BackupRunner): Observable<string> {
         console.log('Syncing...');
         const s = spawn('sh', ['-c', 'sudo bash -c "bbackupctl sync"'])
         s.stdout.on('data', data => { })
+        backupRunner.setLastBackupTime();
         return of('')
     }
 
